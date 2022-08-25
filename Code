@@ -1,0 +1,29 @@
+import pandas as pd
+from sklearn import linear_model
+import statsmodels.api as sm
+data = pd.read_csv('world-happiness-report-2021.csv')
+
+df = pd.DataFrame(data,columns=['Ladder score','Logged GDP per capita','Social support','Healthy life expectancy','Freedom to make life choices','Generosity','Perceptions of corruption'])
+
+X = df[['Logged GDP per capita',	'Social support',	'Healthy life expectancy', 'Freedom to make life choices',	'Generosity',	'Perceptions of corruption']] 
+Y = df['Ladder score']
+
+regr = linear_model.LinearRegression()
+regr.fit(X, Y)
+
+print('Intercept: \n', regr.intercept_)
+print('Coefficients: \n', regr.coef_)
+
+correlation = df.corr()
+
+print('\n')
+print(correlation.loc[['Logged GDP per capita',	'Social support',	'Healthy life expectancy', 'Freedom to make life choices',	'Generosity',	'Perceptions of corruption'], 'Ladder score'])
+print('\n')
+
+X = sm.add_constant(X)
+ 
+model = sm.OLS(Y, X).fit()
+predictions = model.predict(X) 
+ 
+print_model = model.summary()
+print(print_model)
