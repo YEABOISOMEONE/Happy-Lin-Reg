@@ -1,25 +1,31 @@
+#Lines 2-5 import all libraries and the dataset
 import pandas as pd
 from sklearn import linear_model
 import statsmodels.api as sm
 data = pd.read_csv('world-happiness-report-2021.csv')
 
+#Lines 8-11 read the necessary columns in the dataset for regression and set up the parameters
 df = pd.DataFrame(data,columns=['Ladder score','Logged GDP per capita','Social support','Healthy life expectancy','Freedom to make life choices','Generosity','Perceptions of corruption'])
 
 X = df[['Logged GDP per capita',	'Social support',	'Healthy life expectancy', 'Freedom to make life choices',	'Generosity',	'Perceptions of corruption']] 
 Y = df['Ladder score']
 
+#Lines 14 and 15 set up and apply the linear regression model
 regr = linear_model.LinearRegression()
 regr.fit(X, Y)
 
+#Lines 18 and 19 present the coefficients for each parameter and the intercept for the hyperplane-of-best-fit
 print('Intercept: \n', regr.intercept_)
 print('Coefficients: \n', regr.coef_)
 
+#Lines 22-26 calculate the Pearson's Correlation Coefficient for the  dataset, adn present it is a useable form.
 correlation = df.corr()
 
 print('\n')
 print(correlation.loc[['Logged GDP per capita',	'Social support',	'Healthy life expectancy', 'Freedom to make life choices',	'Generosity',	'Perceptions of corruption'], 'Ladder score'])
 print('\n')
 
+#Lines 29-35 present extra information about the Linear Regression
 X = sm.add_constant(X)
  
 model = sm.OLS(Y, X).fit()
